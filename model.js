@@ -110,7 +110,7 @@ async function findOrCreateUser(pProfile){
     if (theErrors.length > 0)
       return Promise.reject(theErrors);
 
-    let user = new userModel(user);
+    user = new userModel(user);
     return await user.save();
   } finally {
     await closeConnection();
@@ -330,7 +330,7 @@ exports.addNewUser = async function(pUser){
     return Promise.reject(theErrors);
 
   if (!validatePassword(pUser.password))
-    tttttheErrors.push("password must be 8 to 20 characters long. Must have at least one of each of uppercase letters, lowercase letters and symbols");
+    theErrors.push("password must be 8 to 20 characters long. Must have at least one of each of uppercase letters, lowercase letters and symbols");
 
   if (theErrors.length > 0)
     return Promise.reject(theErrors);
@@ -421,7 +421,7 @@ function validateEmail(email){
 } // function validateEmail(email)
 
 function validatePassword(password) {
-  if (!(password.length >= 8 && password.length <= 20))
+  if (password.length < 8 || password.length > 50)
     return false;
 
   let valid = true;

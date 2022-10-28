@@ -39,10 +39,7 @@ app.get("/secrets", function(request, response){
   } // if (!request.isAuthenticated())
 
   usersUtility.getAllUserSecrets()
-              .then((results)=>{
-                                  console.log(results);
-                                  response.render("secrets", {secrets: results});
-                                },
+              .then((results)=> response.render("secrets", {secrets: results}),
                     (errors)=> response.send(errors));
 }); // app.get("/secrets", function(request, response)
 
@@ -66,12 +63,8 @@ app.post("/submit", function(request, response){
   } // if (!request.isAuthenticated())
 
   usersUtility.addNewSecret(request.user, {secret: request.body.secret, postDate: new Date()})
-              .then((results)=>{
-                response.redirect("/secrets");
-              }, (errors)=>{
-                  console.log(errors);
-                  response.send(errors);
-                });
+              .then((results)=> response.redirect("/secrets"),
+                    (errors)=> response.send(errors));
 }); // app.post("/submit", function(request, reponse)
 
 app.get("/auth/google", usersUtility.thePassport.authenticate("google", {scope: ["profile"]}));
@@ -117,7 +110,7 @@ function getUser(request){
   return {email: email, password: password};
 } // function getUser(request)
 
-const portNumber = process.env.PORT||3000;
+const portNumber = process.env.PORT||process.env.LOCAL_PORT_NUMBER;
 app.listen(portNumber, function() {
   console.log("Server started on port " + portNumber);
 });
